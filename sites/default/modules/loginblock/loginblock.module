@@ -1,0 +1,84 @@
+<?php
+
+// $Id$
+
+/**
+ *  @file
+ *  A module exemplifying Drupal coding practices and APIs.
+ * 
+ * This module shows login block in particular region
+ * It uses 2 main API functions hook_block_info and hook_block_view
+ */
+
+/**
+ *  Implements hook_help function
+ */
+function loginblock_help($path, $arg) {
+    if ($path == 'admin/help#loginblock') {
+        return t('This is demonstration of block wich will use login form or custom function');
+    }
+}
+
+/**
+ *  Implements hook_block_info
+ */
+function loginblock_block_info() {
+    $blocks = array();
+    
+    $blocks['loginblock'] = array(
+        'info' => t('Login form block'),
+        'cache' => DRUPAL_CACHE_GLOBAL,
+    );
+    
+    return $blocks;
+}
+
+/**
+ *  Implements hook_block_view
+ */
+function loginblock_block_view($delta = ' ') {
+    
+    $block = array();
+    
+    switch ($delta) {
+        case 'loginblock':
+            $block['subject'] = t('Login form block');
+            $block['content'] = drupal_get_form('loginblock');
+
+            break;
+    }
+    return $block;
+}
+
+/**
+ *  Creates myform and render it after login_block_view call it
+ */
+function loginblock() {
+    
+    $form= array();
+    
+    $form['name'] = array(
+        '#title' => t('Your Name'),
+        '#type' => 'textfield',
+        '#size' => 20,
+    );
+    
+    $form['city'] = array(
+        '#title' => t('City'),
+        '#type' => 'textfield',
+        '#size' => 20,
+    );
+    
+    $form['country'] = array(
+        '#title' => t('Country'),
+        '#type' => 'textfield',
+        '#size' => 20,
+    );
+    
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Go bro',
+    );
+    
+    return $form;
+}

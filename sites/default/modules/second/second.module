@@ -1,0 +1,83 @@
+<?php
+
+// $Id$
+
+/**
+ * @file
+ * A second module example of drupal practices and API
+ * 
+ * This module will show all users listed in our system
+ * It ilustrates coding standards, and use of Drupal API
+ */
+
+/**
+ * implements hook_help();
+ */
+function second_help($path, $arg) {
+    switch ($path) {
+        case 'admin/help#second' :
+              $output = '';
+              $output .= '<h3>' . t('About') . '</h3>';
+              $output .= '<p>' . t("A demonstaration second module") . '<p>';
+              return $output;
+    }
+    
+}
+
+/**
+ * Implements hook_block_info()
+ */
+function second_block_info() {
+    $blocks = array();
+    
+    $blocks['mikos_block'] = array(
+      'info' => t('This block should show something'),
+      'cache' => DRUPAL_NO_CACHE,
+    );
+    
+    $blocks['user_login'] = array(
+      'info' => t('This block will show user login form'),
+      'cache' => DRUPAL_NO_CACHE,
+    );
+    
+    return $blocks ;
+}
+
+/**
+ * Implements hook_block_view()
+ */
+function second_block_view($block_name = ' ') {
+   
+    $block = array();
+    
+    switch ($block_name) {
+        
+        case 'mikos_block' :
+            $list = module_list();
+            
+            $theme_args = array('items' => $list, 'type' => 'ul');
+            $content = theme('item_list', $theme_args);
+            
+            $block['subject'] = t('Show all enabled modules');
+            $block['content'] = $content;
+            
+              break;
+
+    
+       case 'user_login' :
+           
+           $block['subject'] = t('Show rss feed icon');
+           $block['content'] = array(
+              '#theme' => 'feed_icon',
+              '#url' => 'rss.xml',
+              '#title' => t('Syndicate'), 
+           );
+    
+    }  
+    
+    return $block;
+}
+
+function second_preprocess_item_list(&$variables) {
+    $variables['attributes']['class'][] = 'foo-list';
+}

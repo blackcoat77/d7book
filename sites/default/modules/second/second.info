@@ -1,0 +1,8 @@
+;$Id$
+
+name = Second
+description = A second module
+package = Drupal 7 Development
+core = 7.x
+files[] = second.module
+files[] = second.test

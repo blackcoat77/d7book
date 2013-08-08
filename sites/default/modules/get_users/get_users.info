@@ -1,0 +1,7 @@
+;$Id$
+
+name = Get Users    
+description = Get All users from DB and show them in block  
+core = 7.x
+package = Custom Miko Modules 
+files[] = get_users.module

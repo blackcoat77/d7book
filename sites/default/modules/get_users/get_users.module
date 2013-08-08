@@ -1,0 +1,9 @@
+<?php
+
+// $Id$
+
+/**
+ *  @file This module should invoke all users from DB and show inside block
+ *   Using DB API and variety of hooks
+ */
+

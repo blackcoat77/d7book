@@ -1,0 +1,40 @@
+<?php
+
+/**
+ *  Class for testing our second module
+ */
+
+class SecondTestCase extends DrupalWebTestCase {
+    
+    public function setUp() {
+        parent::setUp();
+    }
+    
+    public static function getInfo() {
+        return array(
+            'name' => 'Test functionality of the module',
+            'description' => 'Test block in second module',
+            'group' => 'Second',
+        );
+    }
+    
+    public function testBlockInfo() {
+        
+        $info = module_invoke('second', 'block_info');
+        
+       $this->assertEqual(2, count($info), t('Module defines a block.'));
+
+       $this->assertTrue(isset($info['mikos_block']), t('Module rss exists.'));
+    }
+    
+    public function testBlockView() {
+     $data = module_invoke('second', 'block_view', 'mikos_block');
+    
+    $this->assertTrue(is_array($data), t('Block returns renderable array.'));
+    
+    $this->assertEqual(t('Show all enabled modules'), $data['subject'], t('Subject is set'));
+    
+    }
+    
+    
+}

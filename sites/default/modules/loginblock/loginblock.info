@@ -1,0 +1,9 @@
+;$Id$
+
+name = Login Block
+description = This module shows login form on one of our blocks
+package = Custom Miko Modules
+core = 7.x
+
+fies[] = loginblock.module
+
