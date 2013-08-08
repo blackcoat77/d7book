@@ -1,9 +1,100 @@
 <?php
 
-// $Id$
+//$Id$
 
 /**
  *  @file This module should invoke all users from DB and show inside block
  *   Using DB API and variety of hooks
  */
 
+
+/**
+ *  Defines constant for retrieving amounts of users
+ */
+define('GET_USERS_LIST_COUNT', 4);
+
+
+/**
+ *  Creates DB API and retrieves all users as Object
+ */
+function get_users_list($number)  {
+    $query = db_select('users', 'u')
+            ->fields('u', array('uid', 'name', 'created', 'mail'))
+            ->orderBy('created', 'DESC')
+            ->range(0, $number)
+            ->addTag('user_access')
+            ->execute();
+    
+    return $query;
+            
+}
+
+
+
+/**
+  * Implements hook_help()
+  */
+ function get_users_help($path, $arg) {
+ switch ($path) {
+ case 'admin/help#get_users':
+   $output = '';
+   $output .= '<h3>' . t('Get Users Module') . '</h3>';
+   $output .= '<p>' . t("This is help text for our get users module") . '<p>';
+ return $output;
+   }
+ }
+ 
+ /**
+  *  Implements hook_info()
+  */
+ function get_users_block_info()  {
+     // Creates blocks array
+     $blocks = array();
+     
+     // Adds block iunique ID
+     $blocks['all_folks'] = array(
+         'info' => t('Get all Folks from DB'),
+     );
+     
+     return $blocks;
+ }
+ 
+ /**
+  *  Implements hook_view()
+  */
+ function get_users_block_view($delta = ' ')  {
+     // Create an empty block  
+     $block = array(
+         'subject' => '',
+         'content' => '',
+     );
+     
+     // Check which block is being requested
+     if($delta == 'all_folks')  {
+         
+         // Set the block title
+         $block['subject'] = t('Get all Folks from DB');
+         
+         // Check users content access
+         if(user_access('access content'))  {
+             // Retrieves the most recent users
+             $result = get_users_list(GET_USERS_LIST_COUNT);
+             
+             // Creates links for all users
+             $items = array();
+             foreach ($result as $user) {
+                 $items[] = array(
+                     'data' => l($user->name, 'user/' . $user->uid ),
+                     'class' => array('user-' . $user->uid),
+                 );
+             }
+             
+             if(!empty($items))  {
+                 $block['content'] = theme('item_list',  array('items' => $items));
+             }
+         }
+         
+     }
+     
+     return $block;
+ }
