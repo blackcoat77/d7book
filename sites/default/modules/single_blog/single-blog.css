@@ -1,0 +1,11 @@
+/* $Id$ */
+.block-single-blog .content ul {
+padding-left: 0; /* LTR */
+padding-right: 10px;
+}
+
+.block-single-blog .content ul li {
+margin-bottom: 10px;
+list-style-type: none;
+}
+

@@ -76,16 +76,62 @@ function single_blog_block_view($delta = ' ')  {
             $items = array();
             foreach ($result as $node)  {
                 $items[] = array(
-                    'data' => l($node->title, 'node/' . $node->nid),
-                    'class' => array('node-' . $node->nid),
+                    
+                    'data' => array(
+                        '#type' => 'link',
+                        '#title' => $node->title,
+                        '#href' => 'node/' . $node->nid,
+                    ),
+           
                 );
             }
             
             if(!empty($items))  {
                 // Theme the list of blog entries .
-                $block['content'] = theme('item_list', array(
-                                                        'items' => $items ));
+              
+                // This was the first draft!
+               // $block['content'] = theme('item_list', array('items' => $items ));
+                
+                // This is how should be as an render array not a string like in previous example
+                // This also adds child element list and also child element more...
+                $block['content']['list'] = array(
+                    '#theme' => 'item_list__single_blog',
+                    '#items' => $items,
+                    '#pre_render' => array('single_blog_item_list_child_render'),
+                );
+                
+                // Add a link to the full list of blog entries .
+                $block['content']['more'] = array(
+                    '#theme' => 'more_link',
+                    '#url'       => 'blog',
+                    '#title'     => t('Read the latest blog entries'),
+                );
+                
+                // Add a CSS file to style the block.
+                $block['content']['#attached']['css'][] = drupal_get_path('module', 'single_blog') . '/single-blog.css';
+
+                
+                
+        /**
+        * Render the child elements of theme_item_list() before its
+        * data is themed.
+        */
+        function single_blog_item_list_child_render($elements) {
+             foreach (array_keys($elements['#items']) AS $key) {
+        // Take the renderable array that we set in
+        // single_blog_block_view() and render it into the string
+        // that theme_item_list() expects.
+
+        if (is_array($elements['#items'][$key]['data'])) {
+        $elements['#items'][$key]['data'] = drupal_render($elements['#items'][$key]['data']);
+                 }
             }
+        return $elements;
+        }
+
+                
+            }
+            
         }
     }
     return $block;
