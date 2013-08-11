@@ -1,0 +1,6 @@
+;$Id$
+
+name = Demo 
+description = This Demo Module serves to demonstrate some API from video tutorials
+core = 7.x
+package = Custom Miko Modules
