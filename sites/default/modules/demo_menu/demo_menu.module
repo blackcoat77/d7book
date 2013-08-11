@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @file This demo_menu module shows how to build the menu system with
+ * page callback or callback function which will create the content
+ */
+
+/**
+ * Implements hook_help()
+ */
+function demo_menu_help($path, $arg)  {
+    switch ($path) {
+        case 'admin/help#demo_menu':
+            return t('This is help text for function demo menu, below this text you can jum to module configuration');
+    }
+//    krumo($path);
+//    krumo($arg);
+}
+
+/**
+ * Implements hook_permission()
+ */
+function demo_menu_permission()  {
+    return array(
+        'administer demo menu module' => array(
+            'title' => t('Administer Demo Menu Module'),
+            'description' => t('Perform admin tasks for demo menu module'),
+        ),
+    );
+}
+
+/**
+ * Implements hook_menu()
+ */
+function demo_menu_menu()  {
+    $items = array();
+    
+    $items['demo/menu'] = array(
+        'title' => 'Click here for demo menu',
+        'page callback' => 'demo_menu_show',
+        'description' => 'This text will show up when we hover over it',
+        'access arguments' => array('access content'),
+    );
+    
+    $items['user/%/myspace'] = array(
+    'title' => 'My Space',
+    'page callback' => 'demo_menu_hide_admin',
+    'page arguments' => array(1),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer users'),
+    'file' => 'demo_menu_hide_admin.inc',
+    'type' => MENU_LOCAL_TASK, // This will create small tab on my account page
+    );
+    
+    return $items;
+}
+
+/**
+ * Create callback function for our menu demo_menu_show()
+ */
+function demo_menu_show()  {
+    $content = array();
+    
+    $content['raw_markup'] = array(
+        '#type' => 'markup',
+        '#markup' => '<p>' . t('Hey my name is demo_menu_show function and I have been 
+                                            called from page callback  menu item') . '</p>',
+    );
+    return $content;
+}
