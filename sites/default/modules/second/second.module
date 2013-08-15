@@ -35,8 +35,8 @@ function second_block_info() {
       'cache' => DRUPAL_NO_CACHE,
     );
     
-    $blocks['user_login'] = array(
-      'info' => t('This block will show user login form'),
+    $blocks['rss_feed'] = array(
+      'info' => t('This block will show rss feed'),
       'cache' => DRUPAL_NO_CACHE,
     );
     
@@ -64,7 +64,7 @@ function second_block_view($block_name = ' ') {
               break;
 
     
-       case 'user_login' :
+       case 'rss_feed' :
            
            $block['subject'] = t('Show rss feed icon');
            $block['content'] = array(

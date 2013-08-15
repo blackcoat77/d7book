@@ -1,0 +1,6 @@
+name = Person   
+description = Demonstrates persons form from callback function
+core = 7.x
+package = Custom Miko Modules
+
+files[] = person.module

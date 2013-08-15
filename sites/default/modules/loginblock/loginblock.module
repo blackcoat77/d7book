@@ -1,84 +1,115 @@
 <?php
 
-// $Id$
+//$Id$
 
 /**
  *  @file
- *  A module exemplifying Drupal coding practices and APIs.
+ *  A Loginblock module exemplifying Drupal coding practices and APIs.
  * 
- * This module shows login block in particular region
- * It uses 2 main API functions hook_block_info and hook_block_view
+ * This module alterates Login form and login block form and add some new elements
+ * to the form
+ * 
  */
+
+// Check all forms on certain page and print out all available variables
+//function bartik_form_alter(&$form, &$form_state, $form_id)  {
+//  dsm($form_id);  // print form ID to messages
+//  dsm($form);  // pretty print array using Krumo to messages
+//}
 
 /**
- *  Implements hook_help function
- */
-function loginblock_help($path, $arg) {
-    if ($path == 'admin/help#loginblock') {
-        return t('This is demonstration of block wich will use login form or custom function');
-    }
+* Implements hook_form_FORM_ID_alter().We can alter directly form id and no need to invoke
+* hook form alter....
+* http://eureka.ykyuen.info/2012/07/27/drupal-7-customize-the-user-login-block/
+*/
+function loginblock_form_user_login_block_alter(&$form) {
+  // For debug
+//    drupal_set_message('<pre>' . check_plain(var_export($form, TRUE)) . '</pre>');
+//  dsm($form);
+ 
+//  // Remove the links provided by Drupal.
+  unset($form['links']);
+
+//  // Set a weight for form actions so other elements can be placed
+//  // beneath them.
+  $form['actions']['#weight'] = 5;
+
+//  // Shorter, inline request new password link.
+  $form['actions']['request_password'] = array(
+    '#markup' => l(t('Lost password'), 'user/password', array( 'attributes' => array( 'title' => t('Request new password via e-mail.')))),
+  );  
+
+//  // New sign up link, with 'cuter' text.
+  if (variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL)) {
+    $form['signup'] = array(
+      '#markup' => l(t('Register - it’s free!'), 'user/register', array('attributes' => array('class' => 'button', 'id' => 'create-new-account', 'title' => t('Create a new user account.')))),
+      '#weight' => 10, 
+    );  
+  }
 }
 
-/**
- *  Implements hook_block_info
- */
-function loginblock_block_info() {
-    $blocks = array();
-    
-    $blocks['loginblock'] = array(
-        'info' => t('Login form block'),
-        'cache' => DRUPAL_CACHE_GLOBAL,
-    );
-    
-    return $blocks;
-}
 
-/**
- *  Implements hook_block_view
- */
-function loginblock_block_view($delta = ' ') {
-    
-    $block = array();
-    
-    switch ($delta) {
-        case 'loginblock':
-            $block['subject'] = t('Login form block');
-            $block['content'] = drupal_get_form('loginblock');
 
-            break;
-    }
-    return $block;
-}
 
-/**
- *  Creates myform and render it after login_block_view call it
- */
-function loginblock() {
-    
-    $form= array();
-    
-    $form['name'] = array(
-        '#title' => t('Your Name'),
-        '#type' => 'textfield',
-        '#size' => 20,
-    );
-    
-    $form['city'] = array(
-        '#title' => t('City'),
-        '#type' => 'textfield',
-        '#size' => 20,
-    );
-    
-    $form['country'] = array(
-        '#title' => t('Country'),
-        '#type' => 'textfield',
-        '#size' => 20,
-    );
-    
-    $form['submit'] = array(
-        '#type' => 'submit',
-        '#value' => 'Go bro',
-    );
-    
-    return $form;
-}
+
+
+
+//function bartik_form_alter(&$form, &$form_state, $form_id)  {
+//    if($form_id == 'user_login_block')  {
+//    
+//        // Change title on user login block
+//   $form['name']['#title'] = t('Your Username');
+//   $form['actions']['submit']['#value'] = t("Go go girl!");
+//   
+//    }  else {
+//        if($form_id == 'user_login')  {
+//            
+//            // Change title on main User Login page
+//            $form['name']['#title'] = t('Your Username Main Login Form');
+//            $form['actions']['submit']['#value'] = t("Hit this to login bro!");
+//            
+//            // Add new fields to main User login form
+//            $form['user_login'] = array(
+//                
+//                'newfield' => array(
+//                    '#type' => 'textfield',
+//                    '#title' => t('My new text field'),
+//                    '#size' => 30,
+//                    '#required' => TRUE,
+//                    '#prefix' => '<div class="foo-list">',
+//                    '#suffix' => '</div>', 
+//                ),
+//                
+//                'subscription' => array (
+//                    '#type' => 'checkbox',
+//                    '#title'  => t('Check for subscription'),
+//                    ), 
+//            );
+//           
+//        }
+//    }
+//}
+
+
+
+
+//// This function alter local menu task or tabs on login page and add one tab but I don't have the
+//// the path for that tab...So I'll leave it as future  example and I'll make new menu tab with hook_menu()
+// Interesting link to learn something from : http://dominiquedecooman.com/blog/drupal-7-tip-use-menu-local-tasks-page-tasks
+//function loginblock_menu_local_tasks_alter(&$data, $router_item, $root_path)  {
+//    dsm($data);
+//    $data['tabs'][0]['output'][] = array(
+//        '#theme' => 'menu_local_task',
+//        '#link' => array(
+//            'title' => t('Access fn from demo module'),
+//            'href' => 'user/contacts',
+//            'localized_options' => array(
+//                'attributes' => array(
+//                    'title' => t('Read this about user!'),
+//                ),
+//            ),
+//        ),
+//        
+//    ); 
+//}
+

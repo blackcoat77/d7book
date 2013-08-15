@@ -1,0 +1,79 @@
+<?php
+
+/**
+ * @file This person module shows light person form without submit function and validation
+ * It shows as callback function within block
+ */
+
+/**
+ *  Implements hook_help function
+ */
+function person_help($path, $arg) {
+    if ($path == 'admin/help#person') {
+        return t('This is demonstration of block wich will show person form');
+    }
+}
+
+/**
+ *  Implements hook_block_info
+ */
+function person_block_info() {
+    $blocks = array();
+    
+    $blocks['person'] = array(
+        'info' => t('Person Block Form'),
+        'cache' => DRUPAL_CACHE_GLOBAL,
+    );
+    
+    return $blocks;
+}
+
+/**
+ *  Implements hook_block_view
+ */
+function person_block_view($delta = ' ') {
+    
+    $block = array();
+    
+    switch ($delta) {
+        case 'person':
+            $block['subject'] = t('Person Block Form');
+            $block['content'] = drupal_get_form('person');
+
+            break;
+    }
+    return $block;
+}
+
+/**
+ *  Creates myform and render it after person_block_view call it
+ */
+function person() {
+    
+    $form= array();
+    
+    $form['name'] = array(
+        '#title' => t('Your Name'),
+        '#type' => 'textfield',
+        '#size' => 20,
+    );
+    
+    $form['city'] = array(
+        '#title' => t('City'),
+        '#type' => 'textfield',
+        '#size' => 20,
+    );
+    
+    $form['country'] = array(
+        '#title' => t('Country'),
+        '#type' => 'textfield',
+        '#size' => 20,
+    );
+    
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Go bro',
+    );
+    
+    return $form;
+}
