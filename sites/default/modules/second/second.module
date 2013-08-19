@@ -78,6 +78,7 @@ function second_block_view($block_name = ' ') {
     return $block;
 }
 
-function second_preprocess_item_list(&$variables) {
-    $variables['attributes']['class'][] = 'foo-list';
-}
+//function second_preprocess_item_list(&$variables) {
+//    // This will add new class foo-list on every theme_item_list()
+//    $variables['attributes']['class'][] = 'foo-list';
+//}

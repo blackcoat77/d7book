@@ -28,3 +28,7 @@
 <?php  print $text_form; ?>
 </div>
 <!-- /theming-example-text-form template -->
+<div class="container-inline">
+    
+    <?php //dsm($text_form_content) ?>
+</div>
