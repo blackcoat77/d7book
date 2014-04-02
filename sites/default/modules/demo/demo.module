@@ -19,7 +19,7 @@ function demo_help($path, $arg)  {
 /**
  *  Implements hook_node_view()
  */
-function demo_node_view($node, $view_mode, $langcode) {
+    function demo_node_view($node, $view_mode, $langcode) {
     
     if($node->type == 'article') {
         

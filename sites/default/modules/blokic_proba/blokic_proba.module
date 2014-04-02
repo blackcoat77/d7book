@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * This module will do proba and playing arround with it
+ */
+
+/**
+ * Implements hook_help()
+ */
+function blokic_proba_help($path, $arg)  {
+    if ($path == 'admin/help#blokic_proba')  {
+        return t('This is blokic proba module and I will be its help reference');
+    }
+}
+
+/**
+ * Implements hook_block_info()
+ */
+function blokic_proba_block_info()  {
+    $blocks = array();
+    
+    $blocks['my_blokic_1'] = array(
+        'info' => t('I am your blokic 1'),
+        'cache' => DRUPAL_NO_CACHE,
+        'description' => t('I will be your description my blokic'),
+    );
+    
+    $blocks['my_blokic_2'] = array(
+        'info' => t('I am your blokic 2'),
+        'cache' => DRUPAL_CACHE_GLOBAL,
+    );
+    
+    return $blocks;
+}
+
+/**
+ * Implements hook_block_view()
+ */
+function blokic_proba_block_view($delta = ' ')  {
+    
+    switch ($delta) {
+        
+        case 'my_blokic_1':
+            
+            $list = array('blok', 'blokic', 'blokchina');
+            $variables = array('items' => $list, 'type' => 'ol');
+            $content = theme('item_list', $variables);
+            
+            $block = array(
+                'subject' => t('This is my blokic 1'),
+                'content' => $content,
+            );
+       
+            break;
+    
+    
+       case 'my_blokic_2':
+           
+           $list = array('blok2', 'blokic2', 'blokchina2');
+           $variables = array('items' => $list, 'type' => 'ul');
+           $content = theme('item_list', $variables);
+           
+           $block = array(
+               'subject' => t('This is my blokic 2'),
+               'content' => $content,
+           );
+           
+       break;
+    
+    }
+    return $block;
+
+}

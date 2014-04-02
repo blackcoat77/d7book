@@ -1,0 +1,6 @@
+name = Blokic proba
+description = Moj blokic proba
+core = 7.x
+package = Custom Miko Modules
+
+files[] = blokic_proba.module
